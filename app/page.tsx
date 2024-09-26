@@ -1,6 +1,6 @@
 import React from 'react';
 import PropertyComparisonForm from '@/app/components/propertyComparisonForm';
-import PropertyInfoForm from './components/propertyComparisonForm/PropertyInfoForm';
+import PropertyInfoForm from '@/app/components/PropertyInfoForm';
 
 const Home: React.FC = () => {
   return (

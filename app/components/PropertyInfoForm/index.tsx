@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 
 const PropertyInfoForm: React.FC = () => {
-  const [address, setAddress] = useState('');
+  const [address1, setAddress1] = useState('');
+  const [address2, setAddress2] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any | null>(null);
 
@@ -13,26 +14,41 @@ const PropertyInfoForm: React.FC = () => {
       const response = await fetch('/api/property-info', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address }),
+        body: JSON.stringify({ address1, address2 }),
       });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
       const data = await response.json();
       setResult(data);
     } catch (error) {
       console.error('Error:', error);
+      setResult({ error: 'Failed to fetch property information.' });
     } finally {
       setLoading(false);
     }
   };
+  
 
   return (
     <div>
+      <h1>Single Property Information</h1>
       <form onSubmit={handleSubmit} className="mb-4">
         <input
           type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder="Enter property address in California"
+          value={address1}
+          onChange={(e) => setAddress1(e.target.value)}
+          placeholder="Enter address line 1"
           required
+          className="border p-2 mr-2"
+        />
+        <input
+          type="text"
+          value={address2}
+          onChange={(e) => setAddress2(e.target.value)}
+          placeholder="Enter City,State"
           className="border p-2 mr-2"
         />
         <button
@@ -45,7 +61,7 @@ const PropertyInfoForm: React.FC = () => {
       </form>
       {result && (
         <div>
-          <h2 className="text-xl font-bold mb-2">Property Information:</h2>
+          <h2 className="text-xl font-bold mb-2">Single Property Information:</h2>
           <pre className="bg-gray-100 p-4 rounded">
             {JSON.stringify(result, null, 2)}
           </pre>
