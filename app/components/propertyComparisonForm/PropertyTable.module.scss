@@ -1,0 +1,85 @@
+$form-background: #f9f9f9;
+$table-border-color: #ddd;
+$table-header-bg: #f2f2f2;
+$table-hover-bg: #f1f1f1;
+$button-bg: #3b82f6; // Tailwind's blue-500
+$button-text-color: #ffffff;
+
+.formContainer {
+  padding: 1rem;
+  background-color: $form-background;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-x: auto; // Enable horizontal scroll
+
+}
+
+.propertyForm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .inputField {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .submitButton {
+    width: 100%;
+    max-width: 150px;
+    align-self: flex-start;
+    background-color: $button-bg;
+    color: $button-text-color;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+  }
+}
+
+.resultsContainer {
+  margin-top: 1rem;
+
+  @media (min-width: 768px) {
+    display: flex;
+    gap: 1rem; // Adjust spacing as needed
+  }
+}
+
+.propertyTableContainer {
+  margin-bottom: 2rem;
+
+  .propertyTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+
+    tr {
+      padding: 1em;
+
+      td,
+      th {
+        border: 1px solid $table-border-color;
+        padding: 8px;
+      }
+
+      th {
+        background-color: $table-header-bg;
+        text-align: left;
+        font-weight: bold;
+      }
+
+      &:hover {
+        background-color: $table-hover-bg;
+      }
+    }
+  }
+}
+
+.propertyHeader {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.nestedValue {
+  margin-left: 1rem;
+}
