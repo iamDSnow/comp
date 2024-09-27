@@ -1,11 +1,24 @@
-'use client';
+"use client";
+
 import React, { useState } from 'react';
+
+// Define a type for the API response
+interface PropertyInfoResponse {
+  // Add the expected properties from the response
+  // Example:
+  address?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  // Add any other properties you expect
+  error?: string; // If your response may include an error message
+}
 
 const PropertyInfoForm: React.FC = () => {
   const [address1, setAddress1] = useState('');
   const [address2, setAddress2] = useState('');
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any | null>(null);
+  const [result, setResult] = useState<PropertyInfoResponse | null>(null); // Use the new type
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,21 +29,20 @@ const PropertyInfoForm: React.FC = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ address1, address2 }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
-      const data = await response.json();
+
+      const data: PropertyInfoResponse = await response.json(); // Use the defined type
       setResult(data);
     } catch (error) {
       console.error('Error:', error);
-      setResult({ error: 'Failed to fetch property information.' });
+      setResult({ error: 'Failed to fetch property information.' }); // Handle error appropriately
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <div>
