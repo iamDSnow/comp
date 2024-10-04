@@ -51,13 +51,22 @@ const PropertyComparisonForm: React.FC = () => {
     }
   };
 
+  // Clean keys by removing unwanted characters and formatting
   const cleanKeys = (obj: Property | Record<string, unknown>): CleanedProperty => {
     if (Array.isArray(obj)) {
       return obj.map(cleanKeys) as unknown as CleanedProperty;
     }
     if (obj && typeof obj === 'object') {
       return Object.entries(obj).reduce((acc, [key, value]) => {
-        const cleanedKey = key.replace(/^@|^_/, '');
+        // Remove '_ext', underscores, '@' symbols, and add space between camel case words
+        let cleanedKey = key.replace(/@/g, '').replace(/_ext/g, '').replace(/_/g, '');
+        cleanedKey = cleanedKey.replace(/([a-z])([A-Z])/g, '$1 $2'); // Add space between camelCase
+
+        // Exclude PrivacyType and SiteMailAddressSameIndicator rows
+        if (cleanedKey === 'PrivacyType' || cleanedKey === 'Site Mail Address Same Indicator') {
+          return acc;
+        }
+
         acc[cleanedKey] = cleanKeys(value);
         return acc;
       }, {} as CleanedProperty);
@@ -65,34 +74,26 @@ const PropertyComparisonForm: React.FC = () => {
     return obj as CleanedProperty;
   };
 
+  // Convert property data to tables
   const convertToTable = (properties: Property[]) => {
     return properties.map((property, index) => {
       const cleanedProperty = cleanKeys(property);
 
       if (!cleanedProperty || typeof cleanedProperty !== 'object') return null;
 
-      // Remove PRODUCT_INFO_ext and COMPARABLE_PROPERTY_ext from cleanedProperty
-      const { COMPARABLE_PROPERTY_ext, ...filteredProperty } = cleanedProperty;
-
-      // Extract and merge attributes from COMPARABLE_PROPERTY_ext
-      if (COMPARABLE_PROPERTY_ext && typeof COMPARABLE_PROPERTY_ext === 'object') {
-        Object.entries(COMPARABLE_PROPERTY_ext).forEach(([key, value]) => {
-          filteredProperty[key] = value; // Add each entry to the filtered properties
-        });
-      }
-
+      // Create separate tables for each property
       return (
         <div key={index} className={styles.propertyTableContainer}>
           <h3 className={styles.propertyHeader}>Property {index + 1}</h3>
           <table className={styles.propertyTable}>
             <thead>
               <tr>
-                <th className={styles.tableHeader}>Attribute</th>
+                <th className={styles.tableHeader}>Pointer</th>
                 <th className={styles.tableHeader}>Value</th>
               </tr>
             </thead>
             <tbody>
-              {Object.entries({ ...filteredProperty }).map(([key, value]) => (
+              {Object.entries(cleanedProperty).map(([key, value]) => (
                 <tr key={key}>
                   <td className={styles.tableCell}>{key}</td>
                   <td className={styles.tableCell}>{renderNestedValue(value)}</td>
@@ -105,6 +106,7 @@ const PropertyComparisonForm: React.FC = () => {
     });
   };
 
+  // Function to render nested values in columns
   const renderNestedValue = (value: string | number | CleanedProperty | Array<string | number | CleanedProperty>) => {
     if (Array.isArray(value)) {
       return value.map((item, index) => (

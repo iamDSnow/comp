@@ -1,85 +1,108 @@
-$form-background: #f9f9f9;
-$table-border-color: #ddd;
-$table-header-bg: #f2f2f2;
-$table-hover-bg: #f1f1f1;
-$button-bg: #3b82f6; // Tailwind's blue-500
-$button-text-color: #ffffff;
-
 .formContainer {
-  padding: 1rem;
-  background-color: $form-background;
+  width: 100%;
+  max-width: 1200px; // Increase max width for larger screens
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  overflow-x: auto; // Enable horizontal scroll
-
+  background-color: #f9f9f9;
 }
 
 .propertyForm {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  align-items: flex-start;
+}
 
-  .inputField {
-    width: 100%;
-    max-width: 400px;
+.inputField {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 10px;
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #2980b9;
   }
 
-  .submitButton {
-    width: 100%;
-    max-width: 150px;
-    align-self: flex-start;
-    background-color: $button-bg;
-    color: $button-text-color;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
+  &:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
   }
 }
 
 .resultsContainer {
-  margin-top: 1rem;
-
-  @media (min-width: 768px) {
-    display: flex;
-    gap: 1rem; // Adjust spacing as needed
-  }
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; // Ensures proper spacing between tables
+  overflow-x: auto; // Allows horizontal scrolling if content overflows
 }
 
 .propertyTableContainer {
-  margin-bottom: 2rem;
-
-  .propertyTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-
-    tr {
-      padding: 1em;
-
-      td,
-      th {
-        border: 1px solid $table-border-color;
-        padding: 8px;
-      }
-
-      th {
-        background-color: $table-header-bg;
-        text-align: left;
-        font-weight: bold;
-      }
-
-      &:hover {
-        background-color: $table-hover-bg;
-      }
-    }
+  margin-bottom: 30px;
+  flex: 1 1 100%; // Full width on mobile
+  
+  @media screen and (min-width: 601px) {
+    flex: 0 0 48%; // Two tables per row on larger screens
+  }
+  
+  @media screen and (min-width: 1000px) {
+    flex: 0 0 32%; // Three tables per row on larger screens
   }
 }
 
 .propertyHeader {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #2c3e50;
+}
+
+.propertyTable {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.tableHeader {
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  text-align: left;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+}
+
+.tableCell {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 0.95rem;
+
+  &:nth-child(odd) {
+    background-color: #f2f2f2;
+  }
 }
 
 .nestedValue {
-  margin-left: 1rem;
+  margin-left: 20px;
+  font-size: 0.9rem;
+
+  strong {
+    color: #2980b9;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .propertyTable {
+    font-size: 0.8rem;
+  }
 }
